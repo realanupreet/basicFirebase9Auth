@@ -1,14 +1,22 @@
 import "./styles.css";
 import { signup, useAuth, signout, signin } from "./firebase";
 import { useRef, useState } from "react";
+import Profile from "./Profile";
 
 export default function App() {
+  ////
+  /////
+  ////
   const [loading, setLoading] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
   const [info, setInfo] = useState("");
   const currentuser = useAuth();
+  /////
+  ////
+  ////
   const handleSignup = async () => {
+    setInfo("");
     setLoading(true);
     try {
       await signup(emailRef.current.value, passwordRef.current.value);
@@ -21,6 +29,7 @@ export default function App() {
   };
 
   const handleSignin = async () => {
+    setInfo("");
     setLoading(true);
     try {
       await signin(emailRef.current.value, passwordRef.current.value);
@@ -33,6 +42,7 @@ export default function App() {
   };
 
   const handleLogout = async () => {
+    setInfo("");
     try {
       await signout();
     } catch (err) {
@@ -48,6 +58,7 @@ export default function App() {
       <br />
       <input ref={passwordRef} type="password" placeholder="password" />
       <br />
+
       {!loading && (
         <button disabled={currentuser != null} onClick={handleSignup}>
           Sign Up
@@ -69,6 +80,7 @@ export default function App() {
       <p className="info" value={info}>
         {info}
       </p>
+      {currentuser && <Profile />}
     </div>
   );
 }

@@ -4,8 +4,10 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  updateProfile
 } from "firebase/auth";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useEffect, useState } from "react";
 
 const firebaseConfig = {
@@ -21,6 +23,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+const storage = getStorage();
+
 export const signup = (email, password) => {
   return createUserWithEmailAndPassword(auth, email, password);
 };
@@ -39,4 +43,20 @@ export function useAuth() {
     return unsub;
   }, []);
   return currentuser;
+}
+///
+///
+///
+///
+///
+export async function upload(file, currentuser, setLoading) {
+  const fileRef = ref(storage, currentuser.uid + ".png");
+  setLoading(true);
+  const snapshot = await uploadBytes(fileRef, file);
+
+  const photoURL = await getDownloadURL(fileRef);
+  console.log("photourl", photoURL);
+  updateProfile(currentuser, { photoURL: photoURL });
+  setLoading(false);
+  alert("file uploaded");
 }

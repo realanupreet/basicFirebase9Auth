@@ -5,3 +5,9 @@
 * {
   font-size: 1.5rem;
 }
+.o {
+  width: 4rem;
+  height: 4rem;
+  background-color: blue;
+  display: inline-block;
+}
